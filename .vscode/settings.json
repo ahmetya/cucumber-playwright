@@ -1,5 +1,5 @@
 {
-    "window.zoomLevel": -1,
+    "window.zoomLevel": -0.25,
     "editor.tabSize": 2,
     "files.exclude": {
         "**/.DS_Store": true,
@@ -9,6 +9,7 @@
         "**/build": true,
         "**/CVS": true
     },
+    "editor.bracketPairColorization.enabled": true,
     "editor.tabCompletion": "on",
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
@@ -25,9 +26,9 @@
         "**/node_modules": true,
         "**/bower_components": true
     },
-    "javascript.referencesCodeLens.enabled": true,
-    "typescript.referencesCodeLens.enabled": true,
-    "typescript.implementationsCodeLens.enabled": true,
+    "javascript.referencesCodeLens.enabled": false,
+    "typescript.referencesCodeLens.enabled": false,
+    "typescript.implementationsCodeLens.enabled": false,
     "git.autofetch": true,
     "eslint.alwaysShowStatus": true,
     "eslint.options": {
