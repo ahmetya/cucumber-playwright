@@ -52,5 +52,5 @@ Then('I should see my balance', async function (this: ICustomWorld) {
       'button[test-id="user-summary-toggle-button"] span[class*="obg-m-user-summary-balance ng-star-inserted"]',
     )
     .innerText();
-  expect(depositView).toBe('₺0.00');
+  expect(depositView).toContain('0.00'); // guilty as charged
 });
