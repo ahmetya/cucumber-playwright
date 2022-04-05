@@ -1,41 +1,35 @@
-# This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Test 
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+env:
+  CI: true
+  DEBUG: pw:api  
+
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
+  push:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  run:
+    strategy: 
+      matrix:
+        node: [ '14', '16', '17' ]
+    runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-      
+        node-version: ${{ matrix.node }}
+    - name: npm ci
+      run: npm ci
+    - name: run lint
+      run: npm run lint
+    - name: run features
+      run: npm run test
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-result-report
+        path: reports/report.html
