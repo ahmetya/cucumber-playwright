@@ -82,6 +82,7 @@ Then('I should see content table', async function (this: ICustomWorld) {
   await page.waitForLoadState('domcontentloaded');
   for await (const event of events) {
     await event.scrollIntoViewIfNeeded();
+    await page.waitForLoadState('domcontentloaded');
   }
 
   eventItemCount.push(events.length);
