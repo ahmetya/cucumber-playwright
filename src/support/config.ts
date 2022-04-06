@@ -14,5 +14,5 @@ export const config = {
   browserOptions,
   BASE_URL: 'https://www.bets10.com/en',
   IMG_THRESHOLD: { threshold: 0.4 },
-  BASE_API_URL: 'https://www.706bets10.com/api/',
+  BASE_API_URL: 'https://www.708bets10.com/api/',
 };

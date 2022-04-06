@@ -1,11 +1,11 @@
 @foo
 Feature: Login Betson Website
-  As a user
-  I want to login to the application
+  As a registered user without any funds in account
+  I want to place bet on a sports event and receive appropriate error
 
-  Scenario Outline: Login with a registered user
-    Given I should register session info with registered users information
+  Scenario Outline: Create a football event bet request without sufficent balance and get the appropriate error
+    Given I should register session info and validate response schema
     Then I should get sporstbook token with session id
-    Then I should get details for football events
-    Then I should place a bet on first event
+    And I should get details for football events
+    When I should place a bet on first event
     Then I should get "E_BETTING_FUNDS_INSUFFICIENT" as error message

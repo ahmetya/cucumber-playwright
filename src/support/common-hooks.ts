@@ -47,6 +47,7 @@ Before({ tags: '@debug' }, async function (this: ICustomWorld) {
 });
 
 Before(async function (this: ICustomWorld, { pickle }: ITestCaseHookParameter) {
+  const _brandid = '00b32971-a1d3-48ad-abeb-d8a8368e58a6';
   this.startTime = new Date();
   this.testName = pickle.name.replace(/\W/g, '-');
   // customize the [browser context](https://playwright.dev/docs/next/api/class-browser#browsernewcontextoptions)
@@ -59,12 +60,12 @@ Before(async function (this: ICustomWorld, { pickle }: ITestCaseHookParameter) {
   this.server.defaults.baseURL = config.BASE_API_URL;
   this.server.defaults.headers.post = {
     'Content-Type': 'application/json',
-    brandid: '00b32971-a1d3-48ad-abeb-d8a8368e58a6',
+    brandid: _brandid,
     marketcode: 'tr',
   };
   this.server.defaults.headers.get = {
     'Content-Type': 'application/json',
-    brandid: '00b32971-a1d3-48ad-abeb-d8a8368e58a6',
+    brandid: _brandid,
     marketcode: 'tr',
   };
   this.server.interceptors.response.use((res) => res.data);

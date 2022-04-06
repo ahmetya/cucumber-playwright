@@ -1,7 +1,7 @@
 import { ICustomWorld } from '../support/custom-world';
 import { parseApiResponse } from '../utils/genericHelper';
 import expect from 'expect';
-import { Given, Then } from '@cucumber/cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import { AxiosResponse } from 'axios';
 
 let _sessionToken: string;
@@ -12,34 +12,36 @@ let _odds: number;
 let _couponId: string;
 
 Given(
-  'I should register session info with registered users information',
+  'I should register session info and validate response schema',
   async function (this: ICustomWorld) {
+    const url = 'v1/single-sign-on-sessions/';
+    const authRequest = {
+      type: 'up',
+      loginSource: 'Web',
+      iovationBlackBox: '',
+      username: 'dailytester@protonmail.com',
+      password: 'Kartal1903@bjk',
+      shouldRememberUser: false,
+    };
     const response: AxiosResponse | undefined = await this.server
-      ?.post(
-        'v1/single-sign-on-sessions/',
-        '{"type":"up","loginSource":"Web","iovationBlackBox":"","username":"dailytester@protonmail.com","password":"Kartal1903@bjk","shouldRememberUser":false}',
-        {
-          headers: {
-            brandid: '00b32971-a1d3-48ad-abeb-d8a8368e58a6',
-          },
-        },
-      )
+      ?.post(url, authRequest)
       .then((response) => {
         const responseData = parseApiResponse(response);
         _sessionToken = responseData.sessionToken;
         _customerId = responseData.customerId;
-        // console.log(_customerId);
-        // console.log(_sessionToken);
         return response;
       });
     expect(response).toBeDefined();
     expect(_customerId).toBeDefined();
+    const schemaValidation = validateSchema(response);
+    expect(schemaValidation).toBe(true);
   },
 );
 
 Then('I should get balance information', async function (this: ICustomWorld) {
+  const url = 'v2/wallet/balance/';
   const response: AxiosResponse | undefined = await this.server
-    ?.get('v2/wallet/balance/', {
+    ?.get(url, {
       headers: {
         sessiontoken: _sessionToken,
       },
@@ -52,7 +54,6 @@ Then('I should get balance information', async function (this: ICustomWorld) {
 
 Then('I should get sporstbook token with session id', async function (this: ICustomWorld) {
   const url = 'sb/v2/sportsbookgames/betsson/' + _customerId;
-  // console.log(url);
   const response: AxiosResponse | undefined = await this.server
     ?.get(url, {
       headers: {
@@ -62,7 +63,6 @@ Then('I should get sporstbook token with session id', async function (this: ICus
     .then((response) => {
       const responseData = parseApiResponse(response);
       _sportsbooktoken = responseData.token;
-      // console.log(_sportsbooktoken);
       return response;
     });
   expect(response).toBeDefined();
@@ -71,7 +71,6 @@ Then('I should get sporstbook token with session id', async function (this: ICus
 Then('I should get details for football events', async function () {
   const url =
     'sb/v1/widgets/carousel/v2?slug=football/turkey/turkey-super-lig&categoryIds=1&regionIds=27&subcategoryIds=33';
-  // console.log(url);
   const response: AxiosResponse | undefined = await this.server
     ?.get(url, {
       headers: {
@@ -83,15 +82,12 @@ Then('I should get details for football events', async function () {
       const responseData = parseApiResponse(response);
       _id = responseData.data.selections[0].id;
       _odds = responseData.data.selections[0].odds;
-
-      // console.log(_id);
-      // console.log(_odds);
       return response;
     });
   expect(response).toBeDefined();
 });
 
-Then('I should place a bet on first event', async function (this: ICustomWorld) {
+When('I should place a bet on first event', async function (this: ICustomWorld) {
   const requestrDataObj = {
     acceptOddsChanges: false,
     bets: [
@@ -120,8 +116,6 @@ Then('I should place a bet on first event', async function (this: ICustomWorld) 
     .then((response) => {
       const responseData = parseApiResponse(response);
       _couponId = responseData.referenceId;
-      // console.log(_couponId);
-      // console.log(response);
       return response;
     });
   expect(response).toBeDefined();
@@ -132,7 +126,6 @@ Then(
   'I should get {string} as error message',
   async function (this: ICustomWorld, errorMessage: string) {
     const url = 'sb/v2/coupons/' + _couponId;
-    // console.log(url);
     const response: AxiosResponse | undefined = await this.server
       ?.get(url, {
         headers: {
@@ -147,9 +140,65 @@ Then(
         return error.response.data;
       });
     expect(response).toBeDefined();
-    // expect(response).toContain(errorMessage);
-    // console.log(errorMessage);
-    // console.log(response?.data);
     expect(response?.data[0].code).toContain(errorMessage);
   },
 );
+function validateSchema(data: AxiosResponse | undefined) {
+  // options can be passed, e.g. {allErrors: true}
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const Ajv = require('ajv');
+  const ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
+
+  const singleSingOnSchema = {
+    $schema: 'http://json-schema.org/draft-07/schema',
+    $id: 'http://example.com/example.json',
+    type: 'object',
+    default: {},
+    required: [
+      'sessionToken',
+      'timeToLiveSeconds',
+      'personalSessionLimitCheckPeriodSeconds',
+      'customerId',
+      'jurisdiction',
+      'isFirstLogin',
+      'hashedEmail',
+    ],
+    properties: {
+      sessionToken: {
+        $id: '#/properties/sessionToken',
+        type: 'string',
+      },
+      timeToLiveSeconds: {
+        $id: '#/properties/timeToLiveSeconds',
+        type: 'number',
+        title: 'The timeToLiveSeconds schema',
+      },
+      personalSessionLimitCheckPeriodSeconds: {
+        $id: '#/properties/personalSessionLimitCheckPeriodSeconds',
+        type: 'number',
+      },
+      customerId: {
+        $id: '#/properties/customerId',
+        type: 'string',
+      },
+      jurisdiction: {
+        $id: '#/properties/jurisdiction',
+        type: 'string',
+      },
+      isFirstLogin: {
+        $id: '#/properties/isFirstLogin',
+        type: 'boolean',
+      },
+      hashedEmail: {
+        $id: '#/properties/hashedEmail',
+        type: 'string',
+      },
+    },
+    additionalProperties: true,
+  };
+
+  const validate = ajv.compile(singleSingOnSchema);
+  const valid = validate(data);
+  if (!valid) process.stderr.write(JSON.stringify(validate.errors));
+  return valid;
+}

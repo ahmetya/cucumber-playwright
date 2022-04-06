@@ -20,7 +20,8 @@
     "all": "cucumber-js features/**/*.feature",
     "test": "cucumber-js",
     "test:parallel": "cucumber-js --parallel=2",
-    "docker": "docker run --rm --network host -v $(pwd):/work/ -w /work/ -it mcr.microsoft.com/playwright:latest /bin/bash"
+    "docker": "docker run --rm --network host -v $(pwd):/work/ -w /work/ -it mcr.microsoft.com/playwright:latest /bin/bash",
+    "report:alt": "node index.js"
   },
   "engines": {
     "node": ">=14"
@@ -43,13 +44,13 @@
     "axios": "^0.26.0",
     "axois": "^0.0.1-security",
     "cucumber-console-formatter": "1.0.0",
-    "cucumber-html-reporter": "5.5.0",
     "expect": "27.5.1",
     "pixelmatch": "5.2.1",
     "playwright": "1.20.1",
     "pngjs": "6.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.20.2",
     "@types/expect": "24.3.0",
     "@types/lodash": "4.14.180",
     "@types/node": "16.11.26",
@@ -57,6 +58,8 @@
     "@types/pngjs": "6.0.1",
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
+    "ajv": "^8.11.0",
+    "cucumber-html-reporter": "^5.5.0",
     "eslint": "8.12.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.25.4",
