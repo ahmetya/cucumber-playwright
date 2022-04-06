@@ -113,6 +113,7 @@ When('I extend all event tables', async function (this: ICustomWorld) {
 
   for await (const eventGroup of eventGroups) {
     await eventGroup.click();
+    await page.waitForLoadState('domcontentloaded');
   }
 });
 
