@@ -11,16 +11,19 @@ let _id: string;
 let _odds: number;
 let _couponId: string;
 
+// Response of this request includes session token
+// Session token is required for authentication for next requests
+// Related with user data
 Given(
-  'I should register session info and validate response schema',
-  async function (this: ICustomWorld) {
+  'I should register with username {string} and password {string} session info and validate response schema',
+  async function (this: ICustomWorld, username: string, password: string) {
     const url = 'v1/single-sign-on-sessions/';
     const authRequest = {
       type: 'up',
       loginSource: 'Web',
       iovationBlackBox: '',
-      username: 'dailytester@protonmail.com',
-      password: 'Kartal1903@bjk',
+      username: username,
+      password: password,
       shouldRememberUser: false,
     };
     const response: AxiosResponse | undefined = await this.server
@@ -33,11 +36,12 @@ Given(
       });
     expect(response).toBeDefined();
     expect(_customerId).toBeDefined();
-    const schemaValidation = validateSchema(response);
+    const schemaValidation = validateSessionSchema(response);
     expect(schemaValidation).toBe(true);
   },
 );
 
+// Get request that returns balance information for token woner
 Then('I should get balance information', async function (this: ICustomWorld) {
   const url = 'v2/wallet/balance/';
   const response: AxiosResponse | undefined = await this.server
@@ -52,6 +56,7 @@ Then('I should get balance information', async function (this: ICustomWorld) {
   expect(response).toBeDefined();
 });
 
+// This request returns sportsbook token which is required for betting operations
 Then('I should get sporstbook token with session id', async function (this: ICustomWorld) {
   const url = 'sb/v2/sportsbookgames/betsson/' + _customerId;
   const response: AxiosResponse | undefined = await this.server
@@ -68,6 +73,7 @@ Then('I should get sporstbook token with session id', async function (this: ICus
   expect(response).toBeDefined();
 });
 
+// All football events specific for a preselected league
 Then('I should get details for football events', async function () {
   const url =
     'sb/v1/widgets/carousel/v2?slug=football/turkey/turkey-super-lig&categoryIds=1&regionIds=27&subcategoryIds=33';
@@ -87,6 +93,7 @@ Then('I should get details for football events', async function () {
   expect(response).toBeDefined();
 });
 
+// Makes a fixed bet post requst for the first item that returns from event list
 When('I should place a bet on first event', async function (this: ICustomWorld) {
   const requestrDataObj = {
     acceptOddsChanges: false,
@@ -122,6 +129,7 @@ When('I should place a bet on first event', async function (this: ICustomWorld) 
   expect(_customerId).toBeDefined();
 });
 
+// This request validates a business flow which is related information with user
 Then(
   'I should get {string} as error message',
   async function (this: ICustomWorld, errorMessage: string) {
@@ -143,7 +151,9 @@ Then(
     expect(response?.data[0].code).toContain(errorMessage);
   },
 );
-function validateSchema(data: AxiosResponse | undefined) {
+
+// schema validation with ajv library
+function validateSessionSchema(data: AxiosResponse | undefined) {
   // options can be passed, e.g. {allErrors: true}
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const Ajv = require('ajv');

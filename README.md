@@ -45,7 +45,7 @@ npm run test
 
 ## Working with Page Objects
 
-I am not fond of the Page Object Model (POM) for testing. It feels like a leftover from Java world, and I do not think it fits the Javascript world. However, you can check [this PR](https://github.com/Tallyb/cucumber-playwright/pull/95/files) to see POM implementation. 
+I am not fond of the Page Object Model (POM) for testing. It feels like a leftover from Java world, and I do not think it fits the Javascript world. However, you can check [this PR](https://github.com/Tallyb/cucumber-playwright/pull/95/files) to see POM implementation.
 
 ## Debugging Features
 
@@ -88,3 +88,11 @@ In [cucumber.js](cucumber.js) file, modify the options.
 ## To view the html report of the last run
 
 - run the command `npm run report`.
+
+## QA Automation Assignment Notes
+
+- UI automation cases added to validate functionality of sportsbook tables and betslip assertions
+- API automation cases includes user authentication to receive user related data
+- Integration with GitHub Actionas added to project workflow runs on every repository push or manually when required.
+- A new reporting tool added run the command `npm run report:alt` to generate alternative report
+- Scenanarios are self explaning
