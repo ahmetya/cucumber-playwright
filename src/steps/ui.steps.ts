@@ -119,6 +119,7 @@ When('I extend all event tables', async function (this: ICustomWorld) {
 When('I make {int} bet selections', async function (this: ICustomWorld, betCount: number) {
   const page = this.page!;
   const selections = await page.$$('div[test-id="selection"] >> text="Draw"');
+  await page.waitForLoadState('domcontentloaded');
   let iteration = 0;
   for await (const selection of selections) {
     await selection.click();
