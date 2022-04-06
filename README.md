@@ -91,9 +91,9 @@ In [cucumber.js](cucumber.js) file, modify the options.
 
 ## QA Automation Assignment Notes
 
-- Depending to the regulations in my country bets10.com page url chanes in daily basis for our country currently it is https://www.708bets10.com/ (number at the beginning increments daily) this does not effect ui cases but when it change it causes api tests to fail. Please validate it before executing tests. You can change it under [config.js](./src/support/config.ts)  > BASE_API_URL
+- Depending to the regulations in my country [bets10.com](https:/www.bets10.com) url changes in daily basis. Currently it is https://www.708bets10.com/ (number at the beginning increments daily) this does not effect UI cases but it causes API tests to fail. Please validate it before executing tests. You can change it under [config.js](./src/support/config.ts)  > BASE_API_URL
 - UI automation cases added to validate functionality of sportsbook tables and betslip assertions
 - API automation cases includes user authentication to receive user related data
-- Integration with GitHub Actionas added to project workflow runs on every repository push or manually when required.
-- A new reporting tool added run the command `npm run report:alt` to generate alternative report
-- Scenanarios are self explaning
+- Integration with GitHub Actions added to project workflow that triggers on every push or it can be executed manually when required.
+- A new reporting tool added run the command `npm run report:alt` to generate alternative reports.
+- Scenarios are self explaning by feautre files
