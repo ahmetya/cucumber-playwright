@@ -104,6 +104,9 @@ Then('I should see new content is loaded', async function (this: ICustomWorld) {
 
 When('I extend all event tables', async function (this: ICustomWorld) {
   const page = this.page!;
+  page.waitForSelector(
+    'div[class="obg-m-events-master-detail-header no-animation ng-star-inserted"]',
+  );
   const eventGroups = await page.$$(
     'div[class="obg-m-events-master-detail-header no-animation ng-star-inserted"]',
   );
