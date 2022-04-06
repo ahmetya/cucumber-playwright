@@ -79,7 +79,7 @@ Then('I should see content table', async function (this: ICustomWorld) {
   await page.waitForSelector('div[test-id="event.row"]');
   const events = await page.$$('div[test-id="event.row"]');
   await page.waitForLoadState('load');
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState('networkidle');
   for await (const event of events) {
     await event.scrollIntoViewIfNeeded();
     await page.waitForLoadState('domcontentloaded');
