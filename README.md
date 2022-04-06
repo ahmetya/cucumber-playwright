@@ -91,7 +91,7 @@ In [cucumber.js](cucumber.js) file, modify the options.
 
 ## QA Automation Assignment Notes
 
-- Depending to the regulations in my country bets10.com page url chanes in daily basis for our country currently it is https://www.708bets10.com/ (number at the beginning increments daily) this does not effect ui cases but when it change it causes api tests to fail. Please validate it before executing tests. You can change it under ./src/support/config.ts > BASE_API_URL
+- Depending to the regulations in my country bets10.com page url chanes in daily basis for our country currently it is https://www.708bets10.com/ (number at the beginning increments daily) this does not effect ui cases but when it change it causes api tests to fail. Please validate it before executing tests. You can change it under [config.js](./src/support/config.ts)  > BASE_API_URL
 - UI automation cases added to validate functionality of sportsbook tables and betslip assertions
 - API automation cases includes user authentication to receive user related data
 - Integration with GitHub Actionas added to project workflow runs on every repository push or manually when required.
