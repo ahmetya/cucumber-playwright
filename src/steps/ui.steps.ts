@@ -92,9 +92,11 @@ When('I scroll down to the bottom', async function (this: ICustomWorld) {
   const eventGroups = await page.$$(
     'div[class="obg-m-events-master-detail-header no-animation ng-star-inserted"]',
   );
+  await page.waitForLoadState('domcontentloaded');
 
   for await (const eventGroup of eventGroups) {
     await eventGroup.scrollIntoViewIfNeeded();
+    await page.waitForLoadState('domcontentloaded');
   }
 });
 
